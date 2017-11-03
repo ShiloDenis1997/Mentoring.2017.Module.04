@@ -43,7 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventArgs\CreatedEventArgs.cs" />
     <Compile Include="FileDistributorService.cs" />
+    <Compile Include="Abstract\IDistributor.cs" />
+    <Compile Include="Abstract\ILocationsWatcher.cs" />
+    <Compile Include="Abstract\ILogger.cs" />
+    <Compile Include="FilesDistributor.cs" />
+    <Compile Include="FilesWatcher.cs" />
+    <Compile Include="LocationsManager.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Models\FileModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
