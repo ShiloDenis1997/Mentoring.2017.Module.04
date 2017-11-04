@@ -17,7 +17,7 @@ namespace FilesDistributor
 
         public async Task Move(FileModel item)
         {
-            var dirInfo = Directory.CreateDirectory(Path.Combine(@"C:\Users\Dzianis_Shyla\source\repos\Module4\FilesDistributor\bin\Debug", "newFiles"));
+            var dirInfo = Directory.CreateDirectory(Path.Combine(@"E:\mentoringD1D2\solutions", "newFiles"));
             try
             {
                 await Task.Delay(100);

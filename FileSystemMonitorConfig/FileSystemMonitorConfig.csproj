@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{19E52CE0-71A6-4961-91F0-227DB70D53D8}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>FilesDistributor</RootNamespace>
-    <AssemblyName>FilesDistributor</AssemblyName>
+    <ProjectGuid>{1E722CAC-E722-44BF-8058-E44F5269C9C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FileSystemMonitorConfig</RootNamespace>
+    <AssemblyName>FileSystemMonitorConfig</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +24,6 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -44,37 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventArgs\CreatedEventArgs.cs" />
-    <Compile Include="FileDistributorService.cs" />
-    <Compile Include="Abstract\IDistributor.cs" />
-    <Compile Include="Abstract\ILocationsWatcher.cs" />
-    <Compile Include="Abstract\ILogger.cs" />
-    <Compile Include="FilesDistributor.cs" />
-    <Compile Include="FilesWatcher.cs" />
-    <Compile Include="LocationsManager.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="Models\FileModel.cs" />
+    <Compile Include="DirectoryElement.cs" />
+    <Compile Include="DirectoryElementCollection.cs" />
+    <Compile Include="FileSystemMonitorConfigSection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\Strings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FileSystemMonitorConfig\FileSystemMonitorConfig.csproj">
-      <Project>{1e722cac-e722-44bf-8058-e44f5269c9c2}</Project>
-      <Name>FileSystemMonitorConfig</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Compile Include="RuleElement.cs" />
+    <Compile Include="RuleElementCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
