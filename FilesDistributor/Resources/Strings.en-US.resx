@@ -109,4 +109,7 @@
   <data name="FileMovedTemplate" xml:space="preserve">
     <value>File {0} moved to {1}</value>
   </data>
+  <data name="CannotFindFile" xml:space="preserve">
+    <value>Matched file no longer exists</value>
+  </data>
 </root>

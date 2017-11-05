@@ -6,9 +6,9 @@ using FilesDistributor.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-using Strings = FilesDistributor.Resources.Strings;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Strings = FilesDistributor.Resources.Strings;
 
 namespace FilesDistributor
 {
@@ -27,19 +27,6 @@ namespace FilesDistributor
 
         public async Task Move(FileModel item)
         {
-            try
-            {
-                await Task.Delay(100);
-                await Task.Run(() => MoveFile(item));
-            }
-            catch (IOException ioex)
-            {
-                _logger?.Log($"Cannot move file {item.Name} now. Error: {ioex.Message}");
-            }
-        }
-
-        private void MoveFile(FileModel item)
-        {
             string from = item.FullName;
             foreach (Rule rule in _rules)
             {
@@ -50,8 +37,7 @@ namespace FilesDistributor
                     rule.MatchesCount++;
                     string to = FormDestinationPath(item, rule);
                     _logger?.Log(Strings.RuleMatch);
-                    Directory.CreateDirectory(rule.DestinationFolder);
-                    File.Move(from, to);
+                    await MoveFile(from, to);
                     _logger?.Log(string.Format(Strings.FileMovedTemplate, item.FullName, to));
                     return;
                 }
@@ -59,9 +45,37 @@ namespace FilesDistributor
 
             string destination = Path.Combine(_defaultFolder, item.Name);
             _logger?.Log(Strings.RuleNoMatch);
-            Directory.CreateDirectory(_defaultFolder);
-            File.Move(from, destination);
+            await MoveFile(from, destination);
             _logger?.Log(string.Format(Strings.FileMovedTemplate, item.FullName, destination));
+        }
+
+        private async Task MoveFile(string from, string to)
+        {
+            string dir = Path.GetDirectoryName(to);
+            Directory.CreateDirectory(dir);
+            bool cannotAccessFile = true;
+            do
+            {
+                try
+                {
+                    if (File.Exists(to))
+                    {
+                        File.Delete(to);
+                    }
+                    File.Move(from, to);
+                    cannotAccessFile = false;
+                }
+                catch (FileNotFoundException)
+                {
+                    _logger.Log(Strings.CannotFindFile);
+                    break;
+                }
+                catch (IOException ioex)
+                {
+                    var t = ioex.GetType();
+                    await Task.Delay(1000);
+                }
+            } while (cannotAccessFile);
         }
 
         private string FormDestinationPath(FileModel file, Rule rule)

@@ -61,6 +61,15 @@ namespace FilesDistributor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Matched file no longer exists.
+        /// </summary>
+        internal static string CannotFindFile {
+            get {
+                return ResourceManager.GetString("CannotFindFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Founded file: {0}.
         /// </summary>
         internal static string FileFoundedTemplate {

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using FilesDistributor.Abstract;
 using FilesDistributor.Models;
 using FileSystemMonitorConfig;
 using System.Configuration;
-using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -51,9 +48,12 @@ namespace FilesDistributor
             Console.WriteLine(config.Culture.DisplayName);
 
             ILogger logger = new Logger();
-            IDistributor<FileModel> distributor = new FilesDistributor(rules, config.Rules.DefaultDirectory, logger);
-            ILocationsWatcher<FileModel> watcher = new FilesWatcher(directories, logger);
-            LocationsManager<FileModel> locationsManager = new LocationsManager<FileModel>(watcher, distributor);
+            IDistributor<FileModel> distributor =
+                new FilesDistributor(rules, config.Rules.DefaultDirectory, logger);
+            ILocationsWatcher<FileModel> watcher =
+                new FilesWatcher(directories, logger);
+            LocationsManager<FileModel> locationsManager = 
+                new LocationsManager<FileModel>(watcher, distributor);
 
             await Task.Delay(TimeSpan.FromMilliseconds(-1), source.Token);
         }
