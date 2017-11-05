@@ -17,6 +17,7 @@ namespace FilesDistributor
         private readonly ILogger _logger;
         private List<Rule> _rules;
         private string _defaultFolder;
+        private const int fileCheckTimoutMiliseconds = 1000;
 
         public FilesDistributor(IEnumerable<Rule> rules, string defaultFolder, ILogger logger = null)
         {
@@ -73,7 +74,7 @@ namespace FilesDistributor
                 catch (IOException ioex)
                 {
                     var t = ioex.GetType();
-                    await Task.Delay(1000);
+                    await Task.Delay(fileCheckTimoutMiliseconds);
                 }
             } while (cannotAccessFile);
         }
