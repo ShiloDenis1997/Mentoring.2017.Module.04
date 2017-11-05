@@ -59,5 +59,41 @@ namespace FilesDistributor.Resources {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Founded file: {0}.
+        /// </summary>
+        internal static string FileFoundedTemplate {
+            get {
+                return ResourceManager.GetString("FileFoundedTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File {0} moved to {1}.
+        /// </summary>
+        internal static string FileMovedTemplate {
+            get {
+                return ResourceManager.GetString("FileMovedTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rule matches.
+        /// </summary>
+        internal static string RuleMatch {
+            get {
+                return ResourceManager.GetString("RuleMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No rules matches.
+        /// </summary>
+        internal static string RuleNoMatch {
+            get {
+                return ResourceManager.GetString("RuleNoMatch", resourceCulture);
+            }
+        }
     }
 }

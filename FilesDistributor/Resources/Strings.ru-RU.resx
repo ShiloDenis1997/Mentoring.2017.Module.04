@@ -98,15 +98,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FileFoundedTemplate" xml:space="preserve">
-    <value>Founded file: {0}</value>
+    <value>Найден файл: {0}</value>
   </data>
   <data name="RuleMatch" xml:space="preserve">
-    <value>Rule matches</value>
+    <value>Совпадение с правилом</value>
   </data>
   <data name="RuleNoMatch" xml:space="preserve">
-    <value>No rules matches</value>
+    <value>Совпадений с правилами не найдено</value>
   </data>
   <data name="FileMovedTemplate" xml:space="preserve">
-    <value>File {0} moved to {1}</value>
+    <value>Файл {0} перемещён в {1}</value>
   </data>
 </root>

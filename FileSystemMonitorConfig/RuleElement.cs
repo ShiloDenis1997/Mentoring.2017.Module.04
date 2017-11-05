@@ -4,8 +4,8 @@ namespace FileSystemMonitorConfig
 {
     public class RuleElement : ConfigurationElement
     {
-        [ConfigurationProperty("fileTemplate", IsRequired = true, IsKey = true)]
-        public string FileTemplate => (string)this["fileTemplate"];
+        [ConfigurationProperty("filePattern", IsRequired = true, IsKey = true)]
+        public string FilePattern => (string)this["filePattern"];
 
         [ConfigurationProperty("destFolder", IsRequired = true)]
         public string DestinationFolder => (string)this["destFolder"];

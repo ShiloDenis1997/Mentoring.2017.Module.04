@@ -8,22 +8,19 @@ using FilesDistributor.Abstract;
 using FilesDistributor.EventArgs;
 using FilesDistributor.Models;
 
+using Strings = FilesDistributor.Resources.Strings;
+
 namespace FilesDistributor
 {
     public class FilesWatcher : ILocationsWatcher<FileModel>
     {
-        private IList<FileSystemWatcher> _fileSystemWatchers;
+        private List<FileSystemWatcher> _fileSystemWatchers;
         private ILogger _logger;
 
-        public FilesWatcher(ICollection<string> directories, ILogger logger)
+        public FilesWatcher(IEnumerable<string> directories, ILogger logger)
         {
             _logger = logger;
-            _fileSystemWatchers = new List<FileSystemWatcher>(directories.Count);
-
-            foreach (var dir in directories)
-            {
-                _fileSystemWatchers.Add(CreateWatcher(dir));
-            }
+            _fileSystemWatchers = directories.Select(d => CreateWatcher(d)).ToList();
         }
 
         public event EventHandler<CreatedEventArgs<FileModel>> Created;
@@ -44,7 +41,7 @@ namespace FilesDistributor
                 };
             fileSystemWatcher.Created += (sender, fileSystemEventArgs) =>
             {
-                _logger.Log($"File founded: {fileSystemEventArgs.Name}");
+                _logger.Log(string.Format(Strings.FileFoundedTemplate, fileSystemEventArgs.Name));
                 OnCreated(new FileModel { FullName = fileSystemEventArgs.FullPath, Name = fileSystemEventArgs.Name });
             };
 
