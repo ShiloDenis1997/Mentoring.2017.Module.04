@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace FileSystemMonitorConfig
+namespace FilesDistributor.Configuration
 {
     public class RuleElementCollection : ConfigurationElementCollection
     {

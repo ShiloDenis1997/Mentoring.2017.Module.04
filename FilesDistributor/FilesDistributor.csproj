@@ -44,6 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\DirectoryElement.cs" />
+    <Compile Include="Configuration\DirectoryElementCollection.cs" />
+    <Compile Include="Configuration\FileSystemMonitorConfigSection.cs" />
+    <Compile Include="Configuration\RuleElement.cs" />
+    <Compile Include="Configuration\RuleElementCollection.cs" />
     <Compile Include="EventArgs\CreatedEventArgs.cs" />
     <Compile Include="FileDistributorService.cs" />
     <Compile Include="Abstract\IDistributor.cs" />
@@ -51,7 +56,6 @@
     <Compile Include="Abstract\ILogger.cs" />
     <Compile Include="FilesDistributor.cs" />
     <Compile Include="FilesWatcher.cs" />
-    <Compile Include="LocationsManager.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Models\FileModel.cs" />
     <Compile Include="Models\Rule.cs" />
@@ -66,12 +70,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FileSystemMonitorConfig\FileSystemMonitorConfig.csproj">
-      <Project>{1e722cac-e722-44bf-8058-e44f5269c9c2}</Project>
-      <Name>FileSystemMonitorConfig</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\Strings.en-US.resx" />
     <EmbeddedResource Include="Resources\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -79,5 +77,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.ru-RU.resx" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

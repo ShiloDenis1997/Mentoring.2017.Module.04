@@ -70,6 +70,15 @@ namespace FilesDistributor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Config section not founded.
+        /// </summary>
+        internal static string ConfigNotFounded {
+            get {
+                return ResourceManager.GetString("ConfigNotFounded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Founded file: {0}.
         /// </summary>
         internal static string FileFoundedTemplate {

@@ -3,35 +3,74 @@ using System.Threading;
 using System.Threading.Tasks;
 using FilesDistributor.Abstract;
 using FilesDistributor.Models;
-using FileSystemMonitorConfig;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Globalization;
+using FilesDistributor.EventArgs;
+using FilesDistributor.Resources;
+using DirectoryElement = FilesDistributor.Configuration.DirectoryElement;
+using FileSystemMonitorConfigSection = FilesDistributor.Configuration.FileSystemMonitorConfigSection;
+using RuleElement = FilesDistributor.Configuration.RuleElement;
 
 namespace FilesDistributor
 {
     public class FileDistributorService
     {
+        private static List<string> _directories;
+        private static List<Rule> _rules;
+        private static IDistributor<FileModel> _distributor;
+
         static async Task Main(string[] args)
         {
+            FileSystemMonitorConfigSection config = ConfigurationManager.GetSection("fileSystemSection") as FileSystemMonitorConfigSection;
+
+            if (config != null)
+            {
+                ReadConfiguration(config);
+            }
+            else
+            {
+                Console.Write(Strings.ConfigNotFounded);
+                return;
+            }
+
+            Console.WriteLine(config.Culture.DisplayName);
+
+            ILogger logger = new Logger();
+            _distributor = new FilesDistributor(_rules, config.Rules.DefaultDirectory, logger);
+            ILocationsWatcher<FileModel> watcher = new FilesWatcher(_directories, logger);
+
+            watcher.Created += OnCreated;
+            
             CancellationTokenSource source = new CancellationTokenSource();
 
-            Console.CancelKeyPress += (o, e) => { source.Cancel(); };
+            Console.CancelKeyPress += (o, e) =>
+            {
+                watcher.Created -= OnCreated;
+                source.Cancel();
+            };
 
-            FileSystemMonitorConfigSection config =
-                (FileSystemMonitorConfigSection)ConfigurationManager.GetSection("fileSystemSection");
+            await Task.Delay(TimeSpan.FromMilliseconds(-1), source.Token);
+        }
 
-            List<string> directories = new List<string>(config.Directories.Count);
-            List<Rule> rules = new List<Rule>();
+        private static async void OnCreated(object sender, CreatedEventArgs<FileModel> args)
+        {
+            await _distributor.MoveAsync(args.CreatedItem);
+        }
+
+        private static void ReadConfiguration(FileSystemMonitorConfigSection config)
+        {
+            _directories = new List<string>(config.Directories.Count);
+            _rules = new List<Rule>();
 
             foreach (DirectoryElement directory in config.Directories)
             {
-                directories.Add(directory.Path);
+                _directories.Add(directory.Path);
             }
 
             foreach (RuleElement rule in config.Rules)
             {
-                rules.Add(new Rule
+                _rules.Add(new Rule
                 {
                     FilePattern = rule.FilePattern,
                     DestinationFolder = rule.DestinationFolder,
@@ -44,18 +83,6 @@ namespace FilesDistributor
             CultureInfo.DefaultThreadCurrentUICulture = config.Culture;
             CultureInfo.CurrentUICulture = config.Culture;
             CultureInfo.CurrentCulture = config.Culture;
-
-            Console.WriteLine(config.Culture.DisplayName);
-
-            ILogger logger = new Logger();
-            IDistributor<FileModel> distributor =
-                new FilesDistributor(rules, config.Rules.DefaultDirectory, logger);
-            ILocationsWatcher<FileModel> watcher =
-                new FilesWatcher(directories, logger);
-            LocationsManager<FileModel> locationsManager = 
-                new LocationsManager<FileModel>(watcher, distributor);
-
-            await Task.Delay(TimeSpan.FromMilliseconds(-1), source.Token);
         }
     }
 }

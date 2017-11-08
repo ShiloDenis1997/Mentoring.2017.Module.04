@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using System.Globalization;
 
-namespace FileSystemMonitorConfig
+namespace FilesDistributor.Configuration
 {
     public class FileSystemMonitorConfigSection : ConfigurationSection
     {

@@ -12,13 +12,13 @@ namespace FilesDistributor
 {
     public class FilesWatcher : ILocationsWatcher<FileModel>
     {
-        private List<FileSystemWatcher> _fileSystemWatchers;
-        private ILogger _logger;
+        private readonly List<FileSystemWatcher> _fileSystemWatchers;
+        private readonly ILogger _logger;
 
         public FilesWatcher(IEnumerable<string> directories, ILogger logger)
         {
             _logger = logger;
-            _fileSystemWatchers = directories.Select(d => CreateWatcher(d)).ToList();
+            _fileSystemWatchers = directories.Select(CreateWatcher).ToList();
         }
 
         public event EventHandler<CreatedEventArgs<FileModel>> Created;

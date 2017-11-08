@@ -8,6 +8,7 @@ using System.Linq;
 
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Text;
 using Strings = FilesDistributor.Resources.Strings;
 
 namespace FilesDistributor
@@ -15,18 +16,18 @@ namespace FilesDistributor
     public class FilesDistributor : IDistributor<FileModel>
     {
         private readonly ILogger _logger;
-        private List<Rule> _rules;
-        private string _defaultFolder;
-        private const int fileCheckTimoutMiliseconds = 1000;
+        private readonly List<Rule> _rules;
+        private readonly string _defaultFolder;
+        private const int FileCheckTimoutMiliseconds = 1000;
 
-        public FilesDistributor(IEnumerable<Rule> rules, string defaultFolder, ILogger logger = null)
+        public FilesDistributor(IEnumerable<Rule> rules, string defaultFolder, ILogger logger)
         {
             _rules = rules.ToList();
             _logger = logger;
             _defaultFolder = defaultFolder;
         }
 
-        public async Task Move(FileModel item)
+        public async Task MoveAsync(FileModel item)
         {
             string from = item.FullName;
             foreach (Rule rule in _rules)
@@ -37,20 +38,20 @@ namespace FilesDistributor
                 {
                     rule.MatchesCount++;
                     string to = FormDestinationPath(item, rule);
-                    _logger?.Log(Strings.RuleMatch);
-                    await MoveFile(from, to);
-                    _logger?.Log(string.Format(Strings.FileMovedTemplate, item.FullName, to));
+                    _logger.Log(Strings.RuleMatch);
+                    await MoveFileAsync(from, to);
+                    _logger.Log(string.Format(Strings.FileMovedTemplate, item.FullName, to));
                     return;
                 }
             }
 
             string destination = Path.Combine(_defaultFolder, item.Name);
-            _logger?.Log(Strings.RuleNoMatch);
-            await MoveFile(from, destination);
-            _logger?.Log(string.Format(Strings.FileMovedTemplate, item.FullName, destination));
+            _logger.Log(Strings.RuleNoMatch);
+            await MoveFileAsync(from, destination);
+            _logger.Log(string.Format(Strings.FileMovedTemplate, item.FullName, destination));
         }
 
-        private async Task MoveFile(string from, string to)
+        private async Task MoveFileAsync(string from, string to)
         {
             string dir = Path.GetDirectoryName(to);
             Directory.CreateDirectory(dir);
@@ -74,7 +75,7 @@ namespace FilesDistributor
                 catch (IOException ioex)
                 {
                     var t = ioex.GetType();
-                    await Task.Delay(fileCheckTimoutMiliseconds);
+                    await Task.Delay(FileCheckTimoutMiliseconds);
                 }
             } while (cannotAccessFile);
         }
@@ -83,22 +84,23 @@ namespace FilesDistributor
         {
             string extension = Path.GetExtension(file.Name);
             string filename = Path.GetFileNameWithoutExtension(file.Name);
-            string destination = Path.Combine(rule.DestinationFolder, filename);
+            StringBuilder destination = new StringBuilder();
+            destination.Append(Path.Combine(rule.DestinationFolder, filename));
+
             if (rule.IsDateAppended)
             {
                 var dateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat;
                 dateTimeFormat.DateSeparator = ".";
-                destination = $"{destination}_" +
-                    $"{DateTime.Now.ToLocalTime().ToString(dateTimeFormat.ShortDatePattern)}";
+                destination.Append($"{destination}_{DateTime.Now.ToLocalTime().ToString(dateTimeFormat.ShortDatePattern)}");
             }
 
             if (rule.IsOrderAppended)
             {
-                destination += $"_{rule.MatchesCount}";
+                destination.Append($"_{rule.MatchesCount}");
             }
 
-            destination += extension;
-            return destination;
+            destination.Append(extension);
+            return destination.ToString();
         }
     }
 }

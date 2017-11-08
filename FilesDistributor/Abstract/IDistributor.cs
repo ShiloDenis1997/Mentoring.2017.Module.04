@@ -4,6 +4,6 @@ namespace FilesDistributor.Abstract
 {
     public interface IDistributor<TModel>
     {
-        Task Move(TModel item);
+        Task MoveAsync(TModel item);
     }
 }
